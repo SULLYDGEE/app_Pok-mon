@@ -11,12 +11,15 @@ import { Component, Input, OnInit } from '@angular/core';
 export class PokemonFormComponent implements OnInit {
   @Input() pokemon: Pokemon;
   types: string[];
+  isAddForm: boolean;
 
   constructor(private pokemonService: PokemonService, private router: Router) {}
 
   // Initialisation avec tous les types de Pokémon disponible dans le projet.
   ngOnInit() {
     this.types = this.pokemonService.getPokemonTypeList();
+    // si isAddForm vaut threw ça veut dire que je veux rajouter un pokemon sinon je veux editer un pokemon
+    this.isAddForm = this.router.url.includes('add');
   }
 
   // Je peux vérifier si un Pokémon A ou n'a pas un type, ce qui va me permettre de cocher ou décoché les cases à l'initialisation du formulaire
@@ -51,8 +54,16 @@ export class PokemonFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.pokemonService
-      .updatePokemon(this.pokemon)
-      .subscribe(() => this.router.navigate(['/pokemon', this.pokemon.id]));
+    if (this.isAddForm) {
+      this.pokemonService
+        .addPokemon(this.pokemon)
+        .subscribe((pokemon: Pokemon) =>
+          this.router.navigate(['/pokemon', this.pokemon.id])
+        );
+    } else {
+      this.pokemonService
+        .updatePokemon(this.pokemon)
+        .subscribe(() => this.router.navigate(['/pokemon', this.pokemon.id]));
+    }
   }
 }

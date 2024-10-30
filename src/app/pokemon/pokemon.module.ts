@@ -12,10 +12,18 @@ import { PokemonService } from './pokemon.service';
 import { PokemonFormComponent } from './pokemon-form/pokemon-form.component';
 import { EditPokemonComponent } from './edit-pokemon/edit-pokemon.component';
 import { AddPokemonComponent } from './add-pokemon/add-pokemon.component';
+import { SearchPokemonComponent } from './search-pokemon/search-pokemon.component';
+import { LoaderComponent } from './loader/loader.component';
+import { authGuard } from '../auth.guard';
 
 // Définition des routes pour le module Pokémon
 const pokemonRoutes: Routes = [
-  { path: 'pokemons/:id/edit', component: EditPokemonComponent }, // Route pour éditer un Pokémon
+  {
+    path: 'pokemons/:id/edit',
+    component: EditPokemonComponent,
+    canActivate: [authGuard],
+  }, // Route pour éditer un Pokémon
+  { path: 'pokemon/add', component: AddPokemonComponent },
   { path: 'pokemons', component: ListPokemonComponent }, // Route pour lister les Pokémon
   { path: 'pokemons/:id', component: DetailPokemonComponent }, // Route pour les détails d'un Pokémon
 ];
@@ -29,6 +37,8 @@ const pokemonRoutes: Routes = [
     PokemonFormComponent,
     EditPokemonComponent,
     AddPokemonComponent,
+    SearchPokemonComponent,
+    LoaderComponent,
   ],
   imports: [
     CommonModule, // Module commun d'Angular
